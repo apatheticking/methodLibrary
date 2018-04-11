@@ -30,7 +30,10 @@ var library = {
 // p02: Other Playlist - 1 tracks
 
 var printPlaylists = function () {
-
+  var playlists = library.playlists;
+  for (var id in playlists){
+    console.log(id + ": " + playlists[id].name + " - " + playlists[id].tracks.length + " tracks");
+  }
 }
 
 
@@ -40,7 +43,10 @@ var printPlaylists = function () {
 // t03: Four Thirty-Three by John Cage (Woodstock 1952)
 
 var printTracks = function () {
-
+  var tracklists = library.tracks;
+  for(var id in tracklists){
+    console.log(id + ": " + tracklists[id].name + " by " + tracklists[id].artist + " (" + tracklists[id].album + ")");
+  }
 }
 
 
@@ -50,14 +56,25 @@ var printTracks = function () {
 // t02: Model View Controller by James Dempsey (WWDC 2003)
 
 var printPlaylist = function (playlistId) {
+  var playlists = library.playlists[playlistId];
+  var tracks = library.tracks;
 
+  console.log(playlists.id + ": " + playlists.name + " - " +  playlists.tracks.length + " tracks");
+
+  for(var i = 0; i < playlists.tracks.length; i++){
+    for(var id in tracks){
+      if(playlists.tracks[i] === tracks[id].id){
+        console.log(id + ": " + tracks[id].name + " by " + tracks[id].artist + " (" + tracks[id].album + ")");
+      }
+    }
+  }
 }
-
 
 // adds an existing track to an existing playlist
 
 var addTrackToPlaylist = function (trackId, playlistId) {
-
+  //console.log(library.playlists[playlistId].tracks);
+  library.playlists[playlistId].tracks.push(trackId);
 }
 
 
@@ -72,23 +89,39 @@ var uid = function() {
 // adds a track to the library
 
 var addTrack = function (name, artist, album) {
-
+  var id = uid();
+  library.tracks[id] = {name: name, artist: artist, album: album};
 }
 
 
 // adds a playlist to the library
 
 var addPlaylist = function (name) {
-
+  var id = uid();
+  library.playlists[id] = {name: name, tracks: []};
 }
 
 
 // STRETCH:
 // given a query string string, prints a list of tracks
 // where the name, artist or album contains the query string (case insensitive)
-// tip: use "string".search("tri") 
+// tip: use "string".search("tri")
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/search
 
 var printSearchResults = function(query) {
-
+  var tracklists = library.tracks;
+  var re = new RegExp(query, 'i');
+  for(var id in tracklists){
+    if(tracklists[id].name.search(re) > -1 || tracklists[id].artist.search(re) > -1 || tracklists[id].album.search(re) > -1){
+      console.log(id + ": " + tracklists[id].name + " by " + tracklists[id].artist + " (" + tracklists[id].album + ")");
+    }
+  }
 }
+
+//addTrack("All along the watch tower","Jimmy Hendrix","Jimmy Hendrix Experience");
+//addPlaylist("Slow Jams");
+//printSearchResults("jo");
+//printPlaylists();
+//printTracks();
+//addTrackToPlaylist("t03", "p01");
+//printPlaylist("p01");
